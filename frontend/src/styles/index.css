@@ -1,0 +1,383 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ===== Glass Design Tokens ===== */
+:root {
+  --glass-bg-canvas: #f3f4f6;
+  --glass-bg-surface: rgba(255, 255, 255, 0.88);
+  --glass-bg-surface-strong: rgba(255, 255, 255, 0.94);
+  --glass-bg-surface-modal: rgba(255, 255, 255, 0.97);
+  --glass-bg-muted: rgba(255, 255, 255, 0.86);
+  --glass-bg-nav: rgba(255, 255, 255, 0.96);
+  --glass-text-primary: #0a0a0a;
+  --glass-text-secondary: #111827;
+  --glass-text-tertiary: #4b5563;
+  --glass-text-on-accent: #ffffff;
+
+  --glass-stroke-soft: rgba(255, 255, 255, 0.22);
+  --glass-stroke-base: rgba(111, 126, 153, 0.24);
+  --glass-stroke-strong: rgba(93, 109, 138, 0.36);
+  --glass-stroke-focus: rgba(47, 123, 255, 0.64);
+
+  --glass-shadow-sm: 0 2px 10px rgba(22, 35, 64, 0.05);
+  --glass-shadow-md: 0 6px 18px rgba(19, 35, 66, 0.08);
+  --glass-shadow-lg: 0 10px 24px rgba(20, 35, 69, 0.1);
+  --glass-shadow-modal: 0 14px 34px rgba(15, 32, 66, 0.14);
+  --glass-shadow-nav: 0 8px 18px rgba(15, 32, 66, 0.1);
+  --glass-blur-sm: 4px;
+  --glass-blur-md: 8px;
+  --glass-blur-lg: 12px;
+  --glass-blur-nav: 16px;
+
+  --glass-radius-xs: 8px;
+  --glass-radius-sm: 12px;
+  --glass-radius-md: 16px;
+  --glass-radius-lg: 22px;
+  --glass-radius-xl: 28px;
+
+  --glass-accent-from: #2f7bff;
+  --glass-accent-to: #5ca8ff;
+  --glass-accent-shadow-soft: rgba(47, 123, 255, 0.24);
+  --glass-accent-shadow-strong: rgba(47, 123, 255, 0.32);
+  --glass-focus-ring: rgba(47, 123, 255, 0.16);
+  --glass-focus-ring-strong: rgba(47, 123, 255, 0.22);
+  --glass-ghost-hover-bg: rgba(255, 255, 255, 0.5);
+
+  --glass-overlay: rgba(10, 16, 30, 0.46);
+
+  --glass-tone-neutral-bg: rgba(100, 116, 139, 0.18);
+  --glass-tone-neutral-fg: #374151;
+  --glass-tone-info-bg: rgba(47, 123, 255, 0.2);
+  --glass-tone-info-fg: #1d63e8;
+  --glass-tone-success-bg: rgba(16, 185, 129, 0.2);
+  --glass-tone-success-fg: #0f9f62;
+  --glass-tone-danger-bg: rgba(239, 68, 68, 0.2);
+  --glass-tone-danger-fg: #cb3a3a;
+}
+
+/* ===== Glass Semantic Classes ===== */
+.glass-page {
+  background: var(--glass-bg-canvas);
+  color: var(--glass-text-primary);
+  min-height: 100vh;
+}
+
+.glass-surface {
+  background: var(--glass-bg-surface);
+  border: 1px solid var(--glass-stroke-soft);
+  box-shadow: var(--glass-shadow-sm);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border-radius: var(--glass-radius-lg);
+}
+
+.glass-surface-elevated {
+  background: var(--glass-bg-surface-strong);
+  border: 1px solid var(--glass-stroke-soft);
+  box-shadow: var(--glass-shadow-lg);
+  backdrop-filter: blur(var(--glass-blur-lg));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+  border-radius: var(--glass-radius-lg);
+}
+
+.glass-surface-modal {
+  background: var(--glass-bg-surface-modal);
+  border: 1px solid var(--glass-stroke-soft);
+  box-shadow: var(--glass-shadow-modal);
+  border-radius: var(--glass-radius-xl);
+  overflow: hidden;
+}
+
+.glass-input-base,
+.glass-textarea-base {
+  width: 100%;
+  border-radius: var(--glass-radius-md);
+  border: 1px solid transparent;
+  background: var(--glass-bg-muted);
+  box-shadow: inset 0 0 0 1px var(--glass-stroke-base);
+  color: var(--glass-text-primary);
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.glass-input-base::placeholder,
+.glass-textarea-base::placeholder {
+  color: var(--glass-text-tertiary);
+  opacity: 0.85;
+}
+
+.glass-input-base:focus,
+.glass-textarea-base:focus {
+  box-shadow: inset 0 0 0 1px var(--glass-stroke-focus), 0 0 0 3px var(--glass-focus-ring);
+  background: var(--glass-bg-surface-strong);
+}
+
+.glass-btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: var(--glass-radius-md);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.glass-btn-base:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.glass-btn-primary {
+  background: linear-gradient(140deg, var(--glass-accent-from) 0%, var(--glass-accent-to) 100%);
+  border: none;
+  color: var(--glass-text-on-accent);
+  box-shadow: 0 8px 20px var(--glass-accent-shadow-soft);
+}
+
+.glass-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px var(--glass-accent-shadow-strong);
+}
+
+.glass-btn-secondary {
+  background: var(--glass-bg-surface-strong);
+  color: var(--glass-text-primary);
+  box-shadow: var(--glass-shadow-sm);
+}
+
+.glass-btn-soft {
+  background: var(--glass-bg-muted);
+  color: var(--glass-text-primary);
+  box-shadow: none;
+}
+
+.glass-btn-soft:hover:not(:disabled) {
+  background: var(--glass-bg-surface-strong);
+  transform: translateY(-1px);
+}
+
+.glass-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-overlay);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+}
+
+/* ===== Modal 子元素全局样式 ===== */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--glass-stroke-base);
+  padding: 12px 24px;
+  padding-right: 16px;
+}
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--glass-text-primary);
+  margin: 0;
+}
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--glass-text-tertiary);
+  transition: color 0.15s;
+  background: none;
+  border: none;
+  flex-shrink: 0;
+}
+.modal-close-btn:hover {
+  color: var(--glass-text-secondary);
+}
+.modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  border-top: 1px solid var(--glass-stroke-base);
+  background: var(--glass-bg-surface-strong);
+  padding: 16px 24px;
+}
+.modal-footer .glass-btn-base {
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+/* ===== 呼吸灯 / REC / 打字机 动画 ===== */
+@keyframes breathe-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  25% { transform: translate(30px, -20px) scale(1.15); opacity: 0.7; }
+  50% { transform: translate(-20px, 15px) scale(0.95); opacity: 0.4; }
+  75% { transform: translate(15px, 25px) scale(1.1); opacity: 0.65; }
+}
+
+@keyframes breathe-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.45; }
+  30% { transform: translate(-25px, 20px) scale(1.2); opacity: 0.7; }
+  60% { transform: translate(20px, -15px) scale(0.9); opacity: 0.35; }
+  80% { transform: translate(-10px, -25px) scale(1.05); opacity: 0.6; }
+}
+
+@keyframes breathe-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1.05); opacity: 0.4; }
+  20% { transform: translate(20px, 15px) scale(0.9); opacity: 0.55; }
+  45% { transform: translate(-15px, -20px) scale(1.15); opacity: 0.7; }
+  70% { transform: translate(10px, -10px) scale(1); opacity: 0.35; }
+}
+
+@keyframes bracket-breathe {
+  0%, 70%, 100% { opacity: 0.2; }
+  75%, 90% { opacity: 0.6; }
+}
+
+@keyframes rec-pulse {
+  0%, 70%, 100% { opacity: 0.2; }
+  75%, 90% { opacity: 0.6; }
+}
+
+/* 打字机动画 */
+@keyframes twh-focus-pull {
+  0%, 70%, 100% { filter: blur(0px); opacity: 1; }
+  75% { filter: blur(3px); opacity: 0.85; }
+  80% { filter: blur(1.5px); opacity: 0.9; }
+  85% { filter: blur(0.5px); opacity: 0.95; }
+  88% { filter: blur(1px); opacity: 0.92; }
+  92% { filter: blur(0px); opacity: 1; }
+}
+
+@keyframes twh-charIn {
+  0% { opacity: 0; transform: translateY(6px) scale(0.8); }
+  60% { opacity: 1; transform: translateY(-1px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes twh-hover {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.5px); }
+}
+
+@keyframes twh-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Loading 呼吸脉冲 */
+@keyframes loading-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+.loading-breathe {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--glass-accent-from, #6366f1);
+  animation: loading-breathe 3s ease-in-out infinite;
+}
+
+/* 流式文本渐变 */
+@keyframes stream-gradient {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* 通用动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageSlideIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-fadeIn { animation: fadeIn 0.15s ease-out; }
+.animate-fadeInDown { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-page-enter { animation: pageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-shimmer { background-size: 200% 100%; animation: shimmer 3s linear infinite; }
+
+/* 自定义滚动条 — 柔和风格 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 165, 180, 0.25) transparent;
+}
+*:hover {
+  scrollbar-color: rgba(155, 165, 180, 0.45) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(155, 165, 180, 0.25);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(155, 165, 180, 0.45);
+}

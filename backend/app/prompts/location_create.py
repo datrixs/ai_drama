@@ -1,0 +1,80 @@
+TEMPLATE_ZH = """请按照以下提示词规则执行用户的生成场景需求
+
+【场景生成要求（用于出图，中文描述）】
+
+1. 生成1条中文环境描述（80-140字），像真实摄影场景一样描述，必须足够具体到可以稳定控制画面布局
+
+2. **开头必须明确写明场景名称**：
+   - 描述开头必须以"【场景名称】"的形式标注空间属性
+   - 示例：「皇宫」殿内铺设着... / 「客厅」窗外阳光透过... / 「卧室」床边放着...
+   - 这样AI在生成图片时能明确理解这是什么类型的空间
+
+3. 核心原则：
+   - 写真实存在的物体，不要写抽象感受
+   - 材质要具体（深棕色实木地板、青灰色石砖墙、做旧铁艺栏杆）
+   - 物品要有使用痕迹和生活气息（桌上散落的书籍、墙角堆放的杂物、窗台晒干的植物）
+   - 光线要写清楚来源和效果（午后阳光斜照进来在地板上拉出长影、暖黄色壁灯打在墙面上）
+   - 必须写出完整空间结构，不要只写泛场景名词
+   - 必须写出前景/中景/背景或近处/中部/远处层次
+   - 必须写出至少3个清晰可见的关键锚点及其周边空位
+   - 如果用户输入很泛（如「学校教室」「办公室」），你必须主动把它具体化为可控构图，而不是停留在泛描述
+
+4. 禁止：不写主角人物具体动作、不写画风、不写"温馨""优雅"等抽象词
+
+5. 【人群处理规则】
+   - 如果用户描述的场景暗示有人群（如宴会厅、集市、教室上课等），在描述中加入模糊人群元素
+   - 人群描述示例："大厅中宾客三两成群"、"街道上行人往来"、"座位上零散坐着几位观众"
+   - 如果是私密空间或用户明确要求空镜，则不添加人群
+
+6. 额外生成 2-6 个该场景的固定可站位置：
+   - 每个位置必须是一条完整的位置描述短语，而不是短词
+   - 每个位置必须依附于明确的场景锚物或区域
+   - 位置描述中禁止写人物姿态、动作、情绪，只写空间位置
+   - 这些位置里提到的锚点必须在场景描述中真实出现
+   - 示例：饭桌左侧靠桌边的位置、教室后排靠窗那组课桌外侧的位置、皇宫正中龙椅前方台阶下的位置
+
+以下是用户的生成指令:{user_input}
+
+只返回以下json格式，禁止返回一切除json以外的多余内容。⚠️ 所有引号（""''等）在 JSON 字符串值中必须替换为「」，严禁出现未转义的英文双引号 "。
+{{
+  "prompt":"「场景名称」场景描述内容",
+  "available_slots":[
+    "饭桌左侧靠桌边的位置",
+    "门口内侧靠墙的位置"
+  ]
+}}"""
+
+TEMPLATE_EN = """You are a professional environment prompt designer.
+Generate one scene prompt for image generation.
+
+User request:
+{user_input}
+
+Rules:
+1. Output in English only.
+2. Start with scene name in this format: "[Scene Name] ..."
+3. Describe a wide, complete environment with controllable spatial layout, key structures, and visible depth.
+4. Make foreground, midground, and background explicit.
+5. Define at least 3 clear anchor objects or anchor areas and make the nearby open space visible.
+6. If the user input is generic, such as 「classroom」 or 「office」, proactively make it specific enough for stable image layout instead of staying generic.
+7. Mention lighting direction and atmosphere.
+8. No protagonist actions or dialogue.
+9. If crowd is implied by context, use generic crowd terms only (guests, pedestrians, audience).
+10. Also generate 2-6 fixed `available_slots` as complete descriptive placement phrases tied to concrete scene anchors.
+11. Do not mention posture, action, or emotion in `available_slots`. Describe position only.
+12. Every anchor mentioned in `available_slots` must appear clearly in the scene prompt.
+
+Output format:
+Return JSON only. ⚠️ JSON SAFETY: All quotation marks MUST be converted to corner brackets「」in JSON string values:
+{{
+  "prompt": "[Scene Name] environment description",
+  "available_slots": [
+    "the position beside the left edge of the dining table",
+    "the open space just inside the doorway against the wall"
+  ]
+}}"""
+
+
+def build_prompt(user_instruction: str, locale: str = "zh") -> str:
+    template = TEMPLATE_ZH if locale == "zh" else TEMPLATE_EN
+    return template.format(user_input=user_instruction)

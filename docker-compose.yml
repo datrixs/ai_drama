@@ -1,0 +1,159 @@
+services:
+  # ====== 数据库 ======
+  postgres:
+    image: ghcr.io/dbsystel/postgresql-partman:15
+    container_name: drama_pg
+    user: "999:999"
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      TZ: Asia/Shanghai
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-pipixia-drama}
+    volumes:
+      - ../db_data/pgdata:/var/lib/postgresql/data
+    networks:
+      - drama_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ====== Redis ======
+  redis:
+    image: redis:7-alpine
+    container_name: drama_redis
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - ../db_data/redisdata:/data
+    networks:
+      - drama_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ====== 应用======
+  backend:
+    image: drama:v1.0.0
+    container_name: drama_app
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - /data/pipixia/secret:/opt/secret
+      - ../logs:/app/logs
+      - ./frontend:/app_frontend
+      - ./backend/dist:/app_frontend/dist
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo '开始启动...' &&
+        cd /app_frontend &&
+        npm install &&
+        npm run build &&
+        cd /app &&
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
+    networks:
+      - drama_network
+
+  # ====== Celery Worker ======
+  celery-worker:
+    image: drama:v1.0.0
+    container_name: drama_celery_worker
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./backend:/app
+      - ../logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    entrypoint: ["celery"]
+    command: -A app.core.celery worker --loglevel=info -E -P gevent -c 100
+    networks:
+      - drama_network
+
+  # ====== Celery Beat ======
+  celery-beat:
+    image: drama:v1.0.0
+    container_name: drama_celery_beat
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    entrypoint: ["celery"]
+    command: -A app.core.celery beat --loglevel=info
+    networks:
+      - drama_network
+
+  # ====== Celery Flower ======
+  celery-flower:
+    image: drama:v1.0.0
+    container_name: drama_celery_flower
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./backend:/app
+    command: celery -A app.core.celery flower --port=5555
+    ports:
+      - "8085:5555"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - redis
+    networks:
+      - drama_network
+
+  nginx:
+    image: nginx:latest
+    container_name: drama_nginx
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    user: root
+    ports:
+      - "80:80"
+      - "8088:8088"
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../nginx/conf.d:/etc/nginx/conf.d
+      - ../nginx/log:/var/log/nginx
+      - ./backend/dist:/var/www/html
+      - ../nginx/cache:/var/cache/nginx
+      - ../nginx/ssl:/etc/nginx/sslll
+    depends_on:
+      - backend
+    networks:
+      - drama_network
+
+networks:
+  drama_network:
+    driver: bridge

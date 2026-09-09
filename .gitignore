@@ -1,0 +1,50 @@
+# IDE
+.idea/
+.vscode
+.trae/
+.claude/
+old/
+
+# 环境变量与密钥
+.env
+.env.development
+.env.staging
+.env.production
+# 前端构建配置非敏感，保留入库
+!frontend/.env
+*.pfx
+*.cer
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+
+# Node
+node_modules/
+dist/
+
+# 日志与运行时
+logs
+*.log
+celerybeat-schedule*
+
+# 备份
+backup/
+*.sql.gz
+
+# 内部文档（含历史敏感值记录，勿公开）
+开源隐私信息检查清单.md
+# 积分收费规则属内部方案文档，不随开源发布
+backend/docs/积分收费规则修改.md
+
+# 版本升级补丁脚本（内部存量库升级用，开源用户从初始 SQL 全新初始化）
+backend/scripts/add_*.sql
+backend/scripts/update_*.sql
+backend/scripts/update_*.py
+backend/scripts/migrate_*.sql
+backend/scripts/migrate_*.py
+backend/scripts/backfill_*.py
+backend/scripts/seed_model_call_log.py

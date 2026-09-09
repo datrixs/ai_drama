@@ -1,0 +1,122 @@
+TEMPLATE_ZH = """请按照以下提示词规则执行用户的修改场景需求
+
+【场景名称】
+{location_name}
+
+【场景生成要求（用于出图，中文描述）】
+
+1. **开头必须明确写明场景名称**：
+   - 描述开头必须以「{location_name}」的形式标注空间属性
+   - 示例：「皇宫」殿内铺设着... / 「客厅」窗外阳光透过...
+   - 这样AI在生成图片时能明确理解这是什么类型的空间
+
+2. 每个场景生成 1 条中文环境描述，用于AI图片生成
+
+3. 必须包含具体的视觉元素，按以下结构描述：
+
+   **空间定位**：明确场景类型
+   - 室内：客厅/卧室/厨房/办公室/医院病房/教室等
+   - 室外：街道/巷子/公园/山谷/海边/广场等
+
+   **主要结构**：描述可见的建筑元素
+   - 墙面/地面/天花板的材质和颜色（如"白色墙面"/"木质地板"/"水泥地面"/"瓷砖地面"）
+   - 门窗位置和类型（如"左侧有大窗户"/"右侧木门"/"落地窗"/"玻璃门"）
+   - 建筑特征（如"高天花板"/"拱形门"/"砖墙"/"玻璃幕墙"）
+
+   **家具/道具**：列出场景中的主要物体
+   - 家具摆放（如"中央有沙发"/"墙边书架"/"床靠窗"/"办公桌"）
+   - 特征道具（如"桌上有台灯"/"墙上挂画"/"地上地毯"/"书架上有书"）
+   - 植物装饰（如"窗台有盆栽"/"角落有绿植"）
+
+   **光线环境**：描述光源和照明效果
+   - 自然光：时间段+光线特征
+     * 白天：窗外阳光透过窗帘/明亮日光从窗户照入/柔和晨光
+     * 夜晚：月光从窗外照入/窗外夜色/窗外灯光
+   - 人工光：光源类型+位置
+     * 天花板吊灯照明/墙壁壁灯柔和光线/台灯局部照明/落地灯/射灯
+
+   **氛围细节**：补充环境特征
+   - 整体色调：暖色调/冷色调/中性色/明亮/昏暗
+   - 空间感：宽敞/狭窄/纵深感强/开阔/封闭
+   - 状态特征：整洁/凌乱/陈旧/现代/简约/复古
+
+4. 描述规范：
+   - 使用具体名词，避免抽象形容词
+     * ✅ 好："木质书桌"/"灰色布艺沙发"/"白色窗帘"
+     * ❌ 差："优雅的家具"/"舒适的环境"/"温馨的氛围"
+   - 描述固定元素，不写主角人物具体动作、情绪
+   - 必须让空间结构足够具体，不能只剩泛场景标签
+   - 必须让前景/中景/背景或近处/中部/远处关系清楚
+   - 必须保留至少 3 个清晰可见、可供后续落位的锚点或区域
+   - 【人群处理规则】如果用户要求添加人群，或场景本身暗示有人群（如宴会、集市等）：
+     * 可以加入模糊人群描述：\"人群\"、\"宾客\"、\"路人\"等
+     * 示例：\"大厅远处三两宾客交谈\"、\"街角有行人匆匆走过\"
+   - 长度控制在 60-100 字
+   - 不包含艺术风格描述（如"美式漫画风"/"水彩风"），风格由系统自动添加
+   - 不包含光影效果描述（如"dramatic lighting"/"柔和渐变"），由风格控制
+
+你的目标是根据用户的修改指令，在原有场景描述的基础上进行修改
+
+同时你必须重新生成该场景的固定可站位置：
+- 输出 2-6 个站位
+- 每个站位必须是一条完整的位置描述短语，不是短词
+- 每个站位必须依附于明确场景锚物或区域
+- 站位中禁止写人物姿态、动作、情绪，只写位置
+- 新站位必须与修改后的场景描述一致，且其中提到的锚点必须在场景描述中出现
+
+当前场景描述：{location_input}
+
+用户的修改指令：{user_input}
+
+发送json格式给我，只返回以下json格式，禁止返回一切除json以外的多余内容，注释，文字等等，只返回无任何markdown标识符的纯净json格式。⚠️ 所有引号（""''等）在 JSON 字符串值中必须统一替换为「」，严禁出现未转义的英文双引号 "。json格式如下
+{{
+  "prompt":"「场景名」xxxxx",
+  "available_slots":[
+    "皇宫正中龙椅前方台阶下的位置",
+    "左侧立柱与长案之间的空位"
+  ]
+}}"""
+
+TEMPLATE_EN = """You are a professional scene prompt modifier.
+Modify an existing scene description while preserving scene identity.
+
+Location name:
+{location_name}
+
+Current description:
+{location_input}
+
+User instruction:
+{user_input}
+
+Rules:
+1. Keep core scene identity and function.
+2. Apply requested changes with concrete visual details.
+3. Output in English only.
+4. Start with scene name: "[{location_name}] ..."
+5. No protagonist actions, dialogue, or narrative plot.
+6. Make the scene spatially specific enough for controllable image generation, with visible structure, depth, and stable anchors.
+7. Keep at least 3 clear anchor objects or anchor areas visible in the modified scene.
+8. Regenerate 2-6 `available_slots` that stay consistent with the modified scene.
+9. Each `available_slots` item must be one complete descriptive placement phrase, not a short token and not an object.
+10. Do not mention posture, action, or emotion in `available_slots`.
+11. Every anchor mentioned in `available_slots` must also appear in the modified scene description.
+
+Output format:
+Return JSON only. ⚠️ JSON SAFETY: All quotation marks MUST be converted to corner brackets「」in JSON string values:
+{{
+  "prompt": "modified location description",
+  "available_slots": [
+    "the position beneath the throne steps at the center of the hall",
+    "the open space between the left column and the long table"
+  ]
+}}"""
+
+
+def build_prompt(location_name: str, location_input: str, user_input: str, locale: str = "zh") -> str:
+    template = TEMPLATE_ZH if locale == "zh" else TEMPLATE_EN
+    return template.format(
+        location_name=location_name,
+        location_input=location_input,
+        user_input=user_input,
+    )
