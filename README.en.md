@@ -84,6 +84,10 @@ Grouped character/scene assets within a project, reusable across the pipeline
 Unified management of image/audio/video assets, reusable and shareable
 ![Asset Center](docs/screenshots/assets.png)
 
+### Configuration Center
+Default models and API configuration managed in one place, ready for new projects with per-project overrides
+![Configuration Center](docs/screenshots/config.png)
+
 ## 🏗️ Architecture
 
 | Layer | Technology |

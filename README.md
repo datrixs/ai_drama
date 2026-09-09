@@ -83,6 +83,10 @@
 图片、音频、视频资产统一管理，跨项目复用与共享
 ![资产中心](docs/screenshots/assets.png)
 
+### 设置中心
+默认模型与 API 配置集中管理，新项目开箱即用，也可按项目自定义
+![设置中心](docs/screenshots/config.png)
+
 ## 🏗️ 技术架构
 
 | 层级 | 技术 |
