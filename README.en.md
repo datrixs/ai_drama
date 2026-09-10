@@ -23,7 +23,7 @@ scenes and props — then generates storyboard, character/scene/prop images,
 voice-overs and videos, and finally assembles everything into a complete
 short drama.
 
-[Quick Start](#-quick-start) · [Features](#-features) · [Screenshots](#-screenshots) · [Configuration](#%EF%B8%8F-configuration) · [Contributing](#-contributing)
+[Quick Start](#-quick-start) · [Features](#-features) · [Screenshots](#-screenshots) · [Configuration](#%EF%B8%8F-configuration) · [WeChat Community](#-wechat-community) · [Contributing](#-contributing)
 
 <img src="docs/screenshots/overview.png" alt="Pipixia Drama platform home page">
 
@@ -221,6 +221,20 @@ The backend configuration file is `backend/.env` (copied from `.env.example`). K
 
 - [Backend Guide](backend/README.md) — installation, database initialization and service startup
 - [Tech Design](docs/tech/) — architecture and detailed design docs (in Chinese)
+
+## 💬 WeChat Community
+
+Join our WeChat group to share tips and discuss short-drama production with developers and community users:
+
+<div align="center">
+
+<img src="docs/screenshots/wx_qrcode.jpg" width="260" alt="Pipixia Drama WeChat group QR code">
+
+**Scan to join the WeChat community group**
+
+> If the QR code has expired, please reach us via [GitHub Issues](https://github.com/datrixs/ai_drama/issues) for the latest joining instructions
+
+</div>
 
 ## 🤝 Contributing
 
