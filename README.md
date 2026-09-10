@@ -231,4 +231,7 @@ npm run dev
 
 ## 📄 许可证
 
-本项目基于 [MIT License](LICENSE) 开源。
+本项目采用双许可模式：
+
+- **社区版（开源）**：基于 [GNU AGPL-3.0](LICENSE) 开源，个人学习、研究与符合 AGPL-3.0 条款的使用完全免费（含通过网络提供服务时须开放对应源码）
+- **商业版（商业许可）**：如需闭源商用，或在不履行 AGPL-3.0 义务（如不开放托管服务源码）的情况下使用，请通过 [GitHub Issues](https://github.com/datrixs/ai_drama/issues) 联系我们获取商业授权

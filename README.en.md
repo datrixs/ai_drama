@@ -232,4 +232,7 @@ Issues and pull requests are welcome:
 
 ## 📄 License
 
-This project is open-sourced under the [MIT License](LICENSE).
+This project is released under a dual-licensing model:
+
+- **Community Edition (open source)**: licensed under the [GNU AGPL-3.0](LICENSE) — free for personal learning, research and any use that complies with the AGPL-3.0 terms (including releasing the corresponding source code when offering it as a network service)
+- **Commercial Edition (commercial license)**: for closed-source commercial use, or to use this project without the AGPL-3.0 obligations (e.g. hosted services without releasing source code), please obtain a commercial license via [GitHub Issues](https://github.com/datrixs/ai_drama/issues)
