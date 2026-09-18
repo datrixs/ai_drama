@@ -227,7 +227,7 @@ npm run dev
 
 <div align="center">
 
-<img src="docs/screenshots/wx_qrcode.jpg" width="260" alt="皮皮虾短剧微信交流群二维码">
+<img src="docs/screenshots/wx_qrcode.png" width="260" alt="皮皮虾短剧微信交流群二维码">
 
 **扫码加入微信交流群**
 

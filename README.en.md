@@ -228,7 +228,7 @@ Join our WeChat group to share tips and discuss short-drama production with deve
 
 <div align="center">
 
-<img src="docs/screenshots/wx_qrcode.jpg" width="260" alt="Pipixia Drama WeChat group QR code">
+<img src="docs/screenshots/wx_qrcode.png" width="260" alt="Pipixia Drama WeChat group QR code">
 
 **Scan to join the WeChat community group**
 
